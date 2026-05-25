@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>브랜드 세팅 리포트 — 마이브루 | 브랜드랩</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans-serif;background:#F0F4F8;color:#1E293B;padding:1.5rem 1rem 4rem}
+.wrap{max-width:680px;margin:0 auto}
+.app-header{background:#1B2C5E;padding:13px 20px;border-radius:10px 10px 0 0;display:flex;align-items:center;justify-content:space-between}
+.card{background:#fff;border:1px solid #D8E2F0;border-radius:0 0 10px 10px;box-shadow:0 2px 16px rgba(27,44,94,.07)}
+.sec{padding:1.25rem 1.5rem;border-bottom:1px solid #F1F5F9}
+.sec:last-child{border-bottom:none}
+.sec-lbl{font-size:10.5px;font-weight:700;color:#64748B;letter-spacing:1px;margin-bottom:.75rem}
+.item-card{border-radius:9px;overflow:hidden;margin-bottom:8px;background:#fff;border:1px solid #E2E8F0}
+.item-card:last-child{margin-bottom:0}
+.item-inner{padding:11px 13px}
+.bh{border-left:3px solid #DC2626}
+.bm{border-left:3px solid #D97706}
+.bo{border-left:3px solid #059669}
+.item-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.badge-h{background:#FEF2F2;color:#991B1B;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px}
+.badge-m{background:#FFF7ED;color:#92400E;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px}
+.badge-o{background:#ECFDF5;color:#065F46;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px}
+.tog{display:flex;align-items:center;gap:4px;font-size:11px;color:#2D5BE3;font-weight:600;background:none;border:none;cursor:pointer;padding:2px 0 7px;text-align:left}
+.rlist{background:#F8FAFC;border-radius:7px;padding:0 10px;display:none;flex-direction:column;margin-bottom:8px}
+.rlist.open{display:flex}
+.ri{border-bottom:0.5px solid #E2E8F0;padding:8px 0}
+.ri:last-child{border-bottom:none}
+.ri-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:2px}
+.ri-ng{font-size:10px;color:#991B1B;font-weight:600}
+.ri-mid{font-size:10px;color:#92400E;font-weight:600}
+.ri-ok{font-size:10px;color:#065F46;font-weight:600}
+.kw-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}
+.kw-card{background:#F8FAFC;border-radius:7px;padding:8px 10px}
+.btns{display:flex;gap:6px}
+.bs{flex:1;padding:8px;background:#EEF2FF;border-radius:7px;text-align:center;font-size:11px;font-weight:700;color:#0C447C;border:none;cursor:pointer}
+.be{flex:1;padding:8px;background:#1B2C5E;border-radius:7px;text-align:center;font-size:11px;font-weight:700;color:#fff;border:none;cursor:pointer}
+.sum-wrap{display:flex;gap:10px;align-items:stretch;min-height:170px}
+.sum-left{flex:1;display:flex;flex-direction:column;gap:7px}
+.sum-row{display:flex;gap:7px}
+.sum-card{flex:1;border-radius:8px;padding:12px 10px;text-align:center;min-height:72px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.sum-num{font-size:26px;font-weight:700;line-height:1}
+.sum-lbl{font-size:10.5px;margin-top:4px}
+.sum-line{border-radius:7px;padding:7px 10px;font-size:11.5px;font-weight:600;display:flex;gap:7px;margin-bottom:5px}
+.gauge-box{background:#F8FAFC;border:1px solid #E2E8F0;border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:155px;max-width:165px}
+.comment-box{background:#FFF7ED;border:1px solid #FED7AA;border-radius:8px;padding:9px 12px;font-size:12px;color:#92400E;line-height:1.6;margin-bottom:8px}
+.mock-img{width:100%;border-radius:8px;border:1px solid #E2E8F0;margin:6px 0;overflow:hidden}
+.guide-row{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:0.5px solid #F1F5F9}
+.guide-row:last-child{border-bottom:none}
+.guide-icon{width:34px;height:34px;background:#EEF2FF;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px}
+.ap{background:#1B2C5E;border-radius:10px;padding:13px 15px;margin-bottom:1rem}
+.cta-stack{display:flex;flex-direction:column;gap:8px;margin-bottom:.75rem}
+.cta-btn{padding:12px 14px;border-radius:8px;cursor:pointer;border:none;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.cta-a{background:#1B2C5E}
+.cta-b{background:#fff;border:1.5px solid #1B2C5E}
+.cta-c{background:#FEF2F2;border:1.5px solid #FCA5A5}
+.bridge{background:#F8FAFC;border:1px solid #E2E8F0;border-radius:9px;padding:1rem 1.25rem;margin-bottom:1rem}
+.disc{font-size:9.5px;color:#94A3B8;line-height:1.7;padding:10px 12px;background:#F8FAFC;border-radius:8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="app-header">
+  <div style="display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;color:#fff;letter-spacing:2.5px">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="m9 12 2 2 4-4"/></svg>
+    BRAND LAB
+  </div>
+  <span style="font-size:10.5px;color:#93C5FD">브랜드 세팅 리포트</span>
+</div>
+
+<div class="card">
+
+<!-- 브랜드 정보 -->
+<div class="sec">
+  <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:.75rem">
+    <div style="display:flex;align-items:center;gap:11px;flex:1">
+      <div style="width:48px;height:48px;background:#FEE500;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#3A1D1D;flex-shrink:0">M</div>
+      <div>
+        <div style="font-size:10.5px;color:#94A3B8;font-weight:600;letter-spacing:.5px;margin-bottom:2px">검토 브랜드</div>
+        <div style="font-size:20px;font-weight:700;color:#1B2C5E">마이브루 <span style="font-size:13px;color:#94A3B8;font-weight:400">MYBREW</span></div>
+        <div style="font-size:11.5px;color:#64748B;margin-top:3px">수제맥주 제조·판매 · 온·오프라인 병행</div>
+      </div>
+    </div>
+    <div style="text-align:right;flex-shrink:0">
+      <div style="font-size:11.5px;color:#64748B;margin-bottom:3px">진단일 2025년 6월 5일</div>
+      <div style="font-size:10.5px;font-weight:700;color:#1B2C5E">담당: 브랜드랩</div>
+    </div>
+  </div>
+  <div style="display:flex;gap:3px">
+    <div style="flex:1;text-align:center;padding:6px 3px;background:#EEF2FF;border:1px solid #B5D4F4;border-radius:6px;font-size:9px;color:#2D5BE3;font-weight:700;line-height:1.4">① 아이디어<br>구상</div>
+    <div style="flex:1;text-align:center;padding:6px 3px;background:#1B2C5E;border:1px solid #1B2C5E;border-radius:6px;font-size:9px;color:#fff;font-weight:700;line-height:1.4">② 시장<br>조사</div>
+    <div style="flex:1;text-align:center;padding:6px 3px;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:6px;font-size:9px;color:#94A3B8;line-height:1.4">③ 브랜드<br>네임 확정</div>
+    <div style="flex:1;text-align:center;padding:6px 3px;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:6px;font-size:9px;color:#94A3B8;line-height:1.4">④ 온라인<br>채널 세팅</div>
+    <div style="flex:1;text-align:center;padding:6px 3px;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:6px;font-size:9px;color:#94A3B8;line-height:1.4">⑤ 런칭</div>
+  </div>
+</div>
+
+<!-- 진단 요약 -->
+<div class="sec">
+  <div style="font-size:10.5px;font-weight:700;color:#64748B;letter-spacing:1px;margin-bottom:.6rem">진단 요약</div>
+  <div class="sum-wrap">
+    <div class="sum-left">
+      <div class="sum-row">
+        <div class="sum-card" style="background:#FEF2F2;border:1px solid #FCA5A5"><div class="sum-num" style="color:#991B1B">3</div><div class="sum-lbl" style="color:#991B1B">즉시 조치</div></div>
+        <div class="sum-card" style="background:#FFF7ED;border:1px solid #FED7AA"><div class="sum-num" style="color:#92400E">2</div><div class="sum-lbl" style="color:#92400E">검토 필요</div></div>
+        <div class="sum-card" style="background:#F8FAFC;border:1px solid #E2E8F0"><div class="sum-num" style="color:#1B2C5E">3</div><div class="sum-lbl" style="color:#64748B">이상없음</div></div>
+      </div>
+      <div class="sum-line" style="background:#FEF2F2;color:#991B1B"><span style="font-size:10px;white-space:nowrap;flex-shrink:0">즉시조치</span><span style="font-size:11px">상표 검토 · 도메인 확보 · SNS 아이디</span></div>
+      <div class="sum-line" style="background:#FFF7ED;color:#92400E"><span style="font-size:10px;white-space:nowrap;flex-shrink:0">검토필요</span><span style="font-size:11px">포털 실태조사 · 마켓 실태조사</span></div>
+      <div class="sum-line" style="background:#ECFDF5;color:#065F46"><span style="font-size:10px;white-space:nowrap;flex-shrink:0">이상없음</span><span style="font-size:11px">키워드 · 인터넷등기소 · 가맹사업</span></div>
+      <div style="background:#FEF2F2;border:1px solid #FCA5A5;border-radius:8px;padding:9px 11px;font-size:11.5px;color:#991B1B;line-height:1.6;display:flex;gap:7px;flex:1">
+        <span style="flex-shrink:0">🚨</span><span><strong>상표 미검토 상태입니다.</strong> 지식재산처 KIPRIS DB 기준 유사 가능 상표 3건 발견 — 브랜드 공개 전 반드시 전문가 검토가 필요합니다.</span>
+      </div>
+    </div>
+    <div class="gauge-box">
+      <div style="font-size:10px;font-weight:700;background:#1B2C5E;color:#fff;padding:3px 10px;border-radius:20px;margin-bottom:6px">전체 완성도</div>
+      <svg width="150" height="90" viewBox="0 0 150 90">
+        <path d="M20,75 A55,55 0 0,1 130,75" fill="none" stroke="#E2E8F0" stroke-width="12" stroke-linecap="round"/>
+        <path d="M20,75 A55,55 0 0,1 130,75" fill="none" stroke="#DC2626" stroke-width="12" stroke-dasharray="172.8" stroke-dashoffset="138.2" stroke-linecap="round"/>
+        <text x="75" y="67" text-anchor="middle" font-size="22" font-weight="700" fill="#1B2C5E">20%</text>
+        <text x="20" y="87" text-anchor="middle" font-size="9" fill="#94A3B8">0%</text>
+        <text x="130" y="87" text-anchor="middle" font-size="9" fill="#94A3B8">100%</text>
+      </svg>
+      <div style="background:#991B1B;color:#fff;font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;margin-top:7px">즉시 조치 3건</div>
+    </div>
+  </div>
+</div>
+
+<!-- 조사 결과 -->
+<div class="sec">
+  <div class="sec-lbl">조사 결과 (8개 항목)</div>
+
+  <!-- ① 상표 -->
+  <div class="item-card bh">
+    <div class="item-inner" style="background:#FEF2F2">
+      <div class="item-top"><span style="font-size:13px;font-weight:700;color:#1E293B">① 동일·유사 상표 검토</span><span class="badge-h">즉시 조치</span></div>
+      <div style="font-size:11.5px;color:#DC2626;font-weight:600;margin-bottom:3px">유사 가능 상표 3건 발견</div>
+      <div style="font-size:11px;color:#64748B;margin-bottom:6px">지식재산처 KIPRIS DB 기준 조사 결과입니다.</div>
+      <div class="comment-box">💬 동일 류(43류) 내 음칭 유사 상표 2건, 출원 중인 건 1건 발견되었습니다. 특히 MYBEER는 등록 완료 상표로, 출원 시 거절 가능성이 높습니다. 브랜드명 변경 또는 변리사 상담을 강력히 권장드립니다.</div>
+      <button class="tog" onclick="tog(this)">▼ 조사 결과 보기</button>
+      <div class="rlist">
+        <div class="ri">
+          <div class="ri-top"><span style="font-size:12px;font-weight:700;color:#1B2C5E">MYBEER</span><span class="ri-ng">유사도 높음</span></div>
+          <div style="font-size:10.5px;color:#64748B;line-height:1.6">류 43 · 출원인: 다나판다(주) · 등록번호: 4020230094521 · 등록완료<br>지정상품: 맥주, 수제맥주 제조·판매업</div>
+          <svg width="80" height="52" viewBox="0 0 80 52" style="margin-top:6px;border-radius:5px;border:0.5px solid #E2E8F0">
+            <rect width="80" height="52" fill="#fff"/>
+            <rect x="8" y="10" width="64" height="32" rx="4" fill="#FEE500"/>
+            <text x="40" y="32" text-anchor="middle" font-size="14" font-weight="900" fill="#222" font-family="sans-serif">MYBEER</text>
+          </svg>
+        </div>
+        <div class="ri">
+          <div class="ri-top"><span style="font-size:12px;font-weight:700;color:#1B2C5E">MY BREW CO.</span><span class="ri-mid">유사도 중간</span></div>
+          <div style="font-size:10.5px;color:#64748B;line-height:1.6">류 43 · 출원인: 에플인크 · 등록번호: 4020220187634 · 등록완료<br>지정상품: 음료 제조·판매업, 주류 서비스업</div>
+        </div>
+        <div class="ri">
+          <div class="ri-top"><span style="font-size:12px;font-weight:700;color:#1B2C5E">마이브루어리</span><span class="ri-mid">유사도 중간</span></div>
+          <div style="font-size:10.5px;color:#64748B;line-height:1.6">류 35 · 개인 출원 중 · 출원번호: 4020251023847<br>지정상품: 소매업, 도매업 — 분쟁 가능성 있음</div>
+        </div>
+      </div>
+      <div class="btns">
+        <button class="bs" onclick="window.open('https://www.youtube.com/watch?v=tCL5ChbGrOw','_blank')">셀프 가이드: 상표 출원하는 법 →</button>
+        <button class="be" onclick="window.open('https://forms.gle/d67P9JXPVEL4mH5C6','_blank')">변리사 상담 연계</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ② 포털 -->
+  <div class="item-card bm">
+    <div class="item-inner">
+      <div class="item-top"><span style="font-size:13px;font-weight:700;color:#1E293B">② 포털 브랜드명 실태조사</span><span class="badge-m">검토 필요</span></div>
+      <div style="font-size:11.5px;color:#D97706;font-weight:600;margin-bottom:3px">유사 브랜드·상품 다수 검색됨</div>
+      <div style="font-size:11px;color:#64748B;margin-bottom:6px">네이버·구글 검색 기준 (네이버 약 2,300건 / 구글 약 18,400건)</div>
+      <button class="tog" onclick="tog(this)">▼ 조사 결과 보기</button>
+      <div class="rlist">
+        <div class="ri">
+          <div class="ri-top"><span style="font-size:12px;font-weight:700;color:#1B2C5E">BREW BROTHERS</span><span class="ri-mid">유사도 있음</span></div>
+          <div style="font-size:10.5px;color:#64748B">네이버 · 수제맥주 브랜드 · 인지도 중간</div>
+          <!-- 네이버 검색결과 목업 -->
+          <div class="mock-img">
+            <svg viewBox="0 0 460 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block">
+              <rect width="460" height="160" fill="#fff"/>
+              <rect x="0" y="0" width="460" height="38" fill="#fff"/>
+              <text x="12" y="24" font-size="16" font-weight="900" fill="#03C75A" font-family="sans-serif">NAVER</text>
+              <rect x="80" y="8" width="340" height="22" rx="11" fill="#F5F5F5" stroke="#E0E0E0" stroke-width="1"/>
+              <text x="92" y="23" font-size="11" fill="#999" font-family="sans-serif">마이브루</text>
+              <line x1="0" y1="38" x2="460" y2="38" stroke="#E8E8E8" stroke-width="1"/>
+              <text x="12" y="57" font-size="11" fill="#03C75A" font-family="sans-serif" text-decoration="underline">BREW BROTHERS - 수제맥주 전문 브랜드</text>
+              <text x="12" y="70" font-size="9" fill="#888" font-family="sans-serif">www.brewbrothers.co.kr</text>
+              <text x="12" y="83" font-size="9" fill="#555" font-family="sans-serif">홈브루잉 전문 수제맥주 브랜드. 양조 키트, 재료, 장비 판매...</text>
+              <line x1="12" y1="92" x2="448" y2="92" stroke="#F0F0F0" stroke-width="1"/>
+              <text x="12" y="110" font-size="11" fill="#03C75A" font-family="sans-serif" text-decoration="underline">마이맥주닷컴 - 나만의 맥주를 만들어보세요</text>
+              <text x="12" y="123" font-size="9" fill="#888" font-family="sans-serif">www.mymakju.com</text>
+              <text x="12" y="136" font-size="9" fill="#555" font-family="sans-serif">홈브루잉 입문자를 위한 수제맥주 키트 쇼핑몰. 초보자도 쉽게...</text>
+              <line x1="12" y1="145" x2="448" y2="145" stroke="#F0F0F0" stroke-width="1"/>
+              <text x="12" y="156" font-size="9" fill="#aaa" font-family="sans-serif">검색결과 약 2,300개</text>
+            </svg>
+          </div>
+          <div style="font-size:10px;color:#2D5BE3;cursor:pointer;margin-top:2px" onclick="window.open('https://search.naver.com','_blank')">search.naver.com/search.naver?query=마이브루..</div>
+        </div>
+        <div class="ri">
+          <div class="ri-top"><span style="font-size:12px;font-weight:700;color:#1B2C5E">MY BREW KIT</span><span class="ri-mid">유사도 있음</span></div>
+          <div style="font-size:10.5px;color:#64748B">구글 · 해외 수제맥주 키트 · 해외 진출 시 주의</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ③ 도메인 -->
+  <div class="item-card bh">
+    <div class="item-inner" style="background:#FEF2F2">
+      <div class="item-top"><span style="font-size:13px;font-weight:700;color:#1E293B">③ 도메인 확보</span><span class="badge-h">즉시 조치</span></div>
+      <div style="font-size:11.5px;color:#DC2626;font-weight:600;margin-bottom:3px">필수 도메인 미선점 — 즉시 등록 권장</div>
+      <div style="font-size:11px;color:#64748B;margin-bottom:6px">4개 주요 도메인 가용 여부 조사 결과입니다.</div>
+      <button class="tog" onclick="tog(this)">▼ 조사 결과 보기</button>
+      <div class="rlist">
+        <div style="padding:5px 0 3px;font-size:10px;font-weight:700;color:#1B2C5E;letter-spacing:.5px">필수 등록</div>
+        <div class="ri"><div class="ri-top"><span style="font-size:12px;font-weight:700;color:#1B2C5E">mybrew.com</span><span class="ri-ok">등록 가능 · 연 $15</span></div><div style="font-size:10.5px;color:#64748B">즉시 선점 권장</div></div>
+        <div class="ri"><div class="ri-top"><span style="font-size:12px;font-weight:700;color:#1B2C5E">mybrew.co.kr</span><span class="ri-ok">등록 가능 · 연 22,000원</span></div><div style="font-size:10.5px;color:#64748B">즉시 선점 권장</div></div>
+        <div style="padding:5px 0 3px;font-size:10px;font-weight:700;color:#64748B;letter-spacing:.5px">권장 등록</div>
+        <div class="ri"><div class="ri-top"><span style="font-size:12px;font-weight:700;color:#1B2C5E">mybrew.kr</span><span class="ri-ok">등록 가능 · 연 22,000원</span></div><div style="font-size:10.5px;color:#64748B">여유 시 선점</div></div>
+        <div style="padding:5px 0 3px;font-size:10px;font-weight:700;color:#94A3B8;letter-spacing:.5px">참고</div>
+        <div class="ri"><div class="ri-top"><span style="font-size:12px;font-weight:700;color:#94A3B8">mybrew.net</span><span class="ri-ng">이미 선점됨</span></div><div style="font-size:10.5px;color:#64748B">해외 소유 · 사이트 운영 중 · 등록 불필요</div></div>
+      </div>
+      <div class="btns">
+        <button class="bs" onclick="window.open('https://domain.whois.co.kr/','_blank')">셀프 가이드: 도메인 등록하는 법 →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ④ SNS -->
+  <div class="item-card bh">
+    <div class="item-inner" style="background:#FEF2F2">
+      <div class="item-top"><span style="font-size:13px;font-weight:700;color:#1E293B">④ SNS 아이디 확보</span><span class="badge-h">즉시 조치</span></div>
+      <div style="font-size:11.5px;color:#DC2626;font-weight:600;margin-bottom:3px">인스타그램·X 선점 불가 — 대체 아이디 필요</div>
+      <div style="font-size:11px;color:#64748B;margin-bottom:6px">5개 주요 채널 아이디 선점 가능 여부 조사 결과입니다.</div>
+      <button class="tog" onclick="tog(this)">▼ 채널별 결과 보기</button>
+      <div class="rlist">
+        <div class="ri"><div class="ri-top"><span style="font-size:12px;font-weight:700;color:#1B2C5E">인스타그램 @mybrew</span><span class="ri-ng">선점됨</span></div><div style="font-size:10.5px;color:#64748B">팔로워 약 2,400명 · 활성 계정<br>대체 제안: @mybrew_kr / @mybrewkorea</div></div>
+        <div class="ri"><div class="ri-top"><span style="font-size:12px;font-weight:700;color:#1B2C5E">X @mybrew</span><span class="ri-ng">선점됨</span></div><div style="font-size:10.5px;color:#64748B">타인 사용 중 · 대체 아이디 필요</div></div>
+        <div class="ri"><div class="ri-top"><span style="font-size:12px;font-weight:700;color:#1B2C5E">유튜브 @mybrew</span><span class="ri-ok">선점 가능</span></div><div style="font-size:10.5px;color:#64748B">즉시 개설 권장</div></div>
+        <div class="ri"><div class="ri-top"><span style="font-size:12px;font-weight:700;color:#1B2C5E">틱톡 @mybrew</span><span class="ri-ok">선점 가능</span></div><div style="font-size:10.5px;color:#64748B">즉시 개설 권장</div></div>
+      </div>
+      <div class="btns">
+        <button class="bs" onclick="window.open('https://namechk.com/','_blank')">셀프 가이드: SNS 아이디 선점 확인하는 방법 →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ⑤ 마켓 -->
+  <div class="item-card bm">
+    <div class="item-inner">
+      <div class="item-top"><span style="font-size:13px;font-weight:700;color:#1E293B">⑤ 온라인 마켓 실태조사</span><span class="badge-m">검토 필요</span></div>
+      <div style="font-size:11.5px;color:#D97706;font-weight:600;margin-bottom:3px">유사 상품명 다수 판매 중</div>
+      <div style="font-size:11px;color:#64748B;margin-bottom:6px">쿠팡·스마트스토어 조사 결과입니다.</div>
+      <button class="tog" onclick="tog(this)">▼ 조사 결과 보기</button>
+      <div class="rlist">
+        <div class="ri">
+          <div class="ri-top"><span style="font-size:12px;font-weight:700;color:#1B2C5E">마이맥주 홈브루잉 키트 (쿠팡)</span><span class="ri-mid">유사도 있음</span></div>
+          <div style="font-size:10.5px;color:#64748B">수제맥주 키트 · ₩28,900 · 리뷰 약 312개 · 인지도 중간</div>
+          <!-- 쿠팡 목업 -->
+          <div class="mock-img">
+            <svg viewBox="0 0 460 150" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block">
+              <rect width="460" height="150" fill="#fff"/>
+              <rect x="0" y="0" width="460" height="36" fill="#F72B2B"/>
+              <text x="12" y="23" font-size="15" font-weight="900" fill="#fff" font-family="sans-serif">coupang</text>
+              <rect x="85" y="8" width="280" height="20" rx="10" fill="#fff" opacity=".25"/>
+              <text x="97" y="22" font-size="10" fill="#fff" font-family="sans-serif">마이브루 검색결과</text>
+              <rect x="10" y="44" width="80" height="80" rx="6" fill="#FFF3CD"/>
+              <text x="50" y="90" text-anchor="middle" font-size="9" fill="#888" font-family="sans-serif">상품이미지</text>
+              <text x="100" y="60" font-size="11" font-weight="700" fill="#1E293B" font-family="sans-serif">마이맥주 홈브루잉 스타터 키트</text>
+              <text x="100" y="75" font-size="10" fill="#F72B2B" font-family="sans-serif" font-weight="700">₩28,900</text>
+              <text x="100" y="88" font-size="9" fill="#F5A623" font-family="sans-serif">★★★★☆ 4.5 (312)</text>
+              <text x="100" y="100" font-size="9" fill="#64748B" font-family="sans-serif">로켓배송 · 무료반품</text>
+              <line x1="10" y1="132" x2="450" y2="132" stroke="#F0F0F0" stroke-width="1"/>
+              <rect x="10" y="136" width="80" height="8" rx="4" fill="#FFF3CD"/>
+              <text x="100" y="144" font-size="9" fill="#94A3B8" font-family="sans-serif">마이크로브루 입문 세트 外 다수...</text>
+            </svg>
+          </div>
+          <div style="font-size:10px;color:#2D5BE3;cursor:pointer;margin-top:2px" onclick="window.open('https://www.coupang.com','_blank')">coupang.com/np/search?q=마이브루..</div>
+        </div>
+        <div class="ri">
+          <div class="ri-top"><span style="font-size:12px;font-weight:700;color:#1B2C5E">BREW SHOP (스마트스토어)</span><span class="ri-mid">유사도 있음</span></div>
+          <div style="font-size:10.5px;color:#64748B">수제맥주 재료 판매 · 동일 카테고리 · 연간 판매량 약 1,200건</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ⑥ 키워드 -->
+  <div class="item-card bo">
+    <div class="item-inner">
+      <div class="item-top"><span style="font-size:13px;font-weight:700;color:#1E293B">⑥ 네이버 키워드 검색량</span><span class="badge-o">이상없음</span></div>
+      <div style="font-size:11.5px;color:#059669;font-weight:600;margin-bottom:6px">월 검색량 양호 · 경쟁도 중간 · SEO 유리한 구조</div>
+      <div class="kw-grid">
+        <div class="kw-card"><div style="font-size:15px;font-weight:700;color:#1B2C5E">1,200</div><div style="font-size:10px;color:#64748B;margin-top:1px">월 총 검색량</div></div>
+        <div class="kw-card"><div style="font-size:15px;font-weight:700;color:#D97706">중간</div><div style="font-size:10px;color:#64748B;margin-top:1px">경쟁정도</div></div>
+        <div class="kw-card"><div style="font-size:15px;font-weight:700;color:#1B2C5E">820</div><div style="font-size:10px;color:#64748B;margin-top:1px">모바일 검색수</div></div>
+        <div class="kw-card"><div style="font-size:15px;font-weight:700;color:#1B2C5E">380</div><div style="font-size:10px;color:#64748B;margin-top:1px">PC 검색수</div></div>
+      </div>
+      <button class="tog" onclick="tog(this)">▼ 연관 키워드 보기</button>
+      <div class="rlist">
+        <div class="ri"><div class="ri-top"><span style="font-size:12px;font-weight:700;color:#1B2C5E">수제맥주 만들기</span><span class="ri-ok">월 8,400회</span></div><div style="font-size:10.5px;color:#64748B">경쟁도 중간 · PC 3,200 / 모바일 5,200 · 연관 콘텐츠 제작 추천</div></div>
+        <div class="ri"><div class="ri-top"><span style="font-size:12px;font-weight:700;color:#1B2C5E">홈브루잉</span><span class="ri-ok">월 3,200회</span></div><div style="font-size:10.5px;color:#64748B">경쟁도 낮음 · PC 980 / 모바일 2,220 · 핵심 키워드 활용 추천</div></div>
+        <div class="ri"><div class="ri-top"><span style="font-size:12px;font-weight:700;color:#1B2C5E">MYBREW</span><span class="ri-ok">월 320회</span></div><div style="font-size:10.5px;color:#64748B">경쟁도 낮음 · 브랜드 직접 검색 · 성장 추세</div></div>
+      </div>
+      <div class="btns">
+        <button class="bs" onclick="window.open('https://imweb.me/faq?mode=view&category=29&category2=33&idx=2471','_blank')">셀프 가이드: SEO 키워드 세팅하는 법 →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ⑦ 인터넷등기소 -->
+  <div class="item-card bo">
+    <div class="item-inner">
+      <div class="item-top"><span style="font-size:13px;font-weight:700;color:#1E293B">⑦ 인터넷등기소 상호 확인</span><span class="badge-o">이상없음</span></div>
+      <div style="font-size:11.5px;color:#059669;font-weight:600;margin-bottom:3px">동일 법인명 없음</div>
+      <div style="font-size:11px;color:#64748B;margin-bottom:6px">법원 상업등기 기준 · <strong>법인 설립 예정 시 참고하세요.</strong></div>
+      <button class="tog" onclick="tog(this)">▼ 조사 결과 보기</button>
+      <div class="rlist">
+        <div class="ri"><div class="ri-top"><span style="font-size:12px;font-weight:700;color:#1B2C5E">마이브루 (주)</span><span class="ri-ok">없음</span></div><div style="font-size:10.5px;color:#64748B">동일 법인명 등록 없음 확인</div></div>
+        <div class="ri"><div class="ri-top"><span style="font-size:12px;font-weight:700;color:#1B2C5E">MYBREW</span><span class="ri-ok">없음</span></div><div style="font-size:10.5px;color:#64748B">영문 상호 등록 없음 확인</div></div>
+      </div>
+      <div class="btns">
+        <button class="bs" onclick="window.open('https://lumpenman.tistory.com/3','_blank')">셀프 가이드: 인터넷등기소 상호 확인하는 법 →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ⑧ 가맹사업 -->
+  <div class="item-card bo">
+    <div class="item-inner">
+      <div class="item-top"><span style="font-size:13px;font-weight:700;color:#1E293B">⑧ 가맹사업 상호 확인</span><span class="badge-o">이상없음</span></div>
+      <div style="font-size:11.5px;color:#059669;font-weight:600;margin-bottom:3px">동일·유사 가맹사업 없음</div>
+      <div style="font-size:11px;color:#64748B;margin-bottom:6px">공정거래위원회 기준 · <strong>프랜차이즈 예정 시 참고하세요.</strong></div>
+      <button class="tog" onclick="tog(this)">▼ 조사 결과 보기</button>
+      <div class="rlist">
+        <div class="ri"><div class="ri-top"><span style="font-size:12px;font-weight:700;color:#1B2C5E">마이브루 관련 가맹사업</span><span class="ri-ok">없음</span></div><div style="font-size:10.5px;color:#64748B">공정거래위원회 가맹사업 정보 기준 — 동일·유사 상호 없음 확인</div></div>
+      </div>
+      <div class="btns">
+        <button class="bs" onclick="window.open('https://franchise.ftc.go.kr/mnu/00013/program/userRqst/list.do','_blank')">셀프 가이드: 가맹사업 상호 확인 방법 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 세팅 가이드 -->
+<div class="sec">
+  <div class="sec-lbl">세팅 가이드</div>
+  <div class="guide-row"><div class="guide-icon">🖥️</div><div style="flex:1"><div style="font-size:12.5px;font-weight:700;color:#1E293B;margin-bottom:2px">홈페이지 제작</div><div style="font-size:11px;color:#64748B;margin-bottom:7px">도메인 선점 후 연결. 브랜드 가이드 기반 제작 권장.</div><button class="bs" onclick="window.open('https://imweb.me/','_blank')">무료 제작 도구 →</button></div></div>
+  <div class="guide-row"><div class="guide-icon">📍</div><div style="flex:1"><div style="font-size:12.5px;font-weight:700;color:#1E293B;margin-bottom:2px">네이버 플레이스 등록</div><div style="font-size:11px;color:#64748B;margin-bottom:7px">오프라인 공간이 있을 경우. 로컬 검색 유입에 영향.</div><button class="bs" onclick="window.open('https://m.blog.naver.com/victoryace89/224241912375','_blank')">셀프 가이드: 플레이스 등록법 →</button></div></div>
+  <div class="guide-row" style="border-bottom:none"><div class="guide-icon">📦</div><div style="flex:1"><div style="font-size:12.5px;font-weight:700;color:#1E293B;margin-bottom:2px">통신판매업 신고</div><div style="font-size:11px;color:#64748B;margin-bottom:7px">온라인 판매 예정 시 필수. 미신고 시 과태료.</div><button class="bs" onclick="window.open('https://imweb.me/faq?mode=view&category=29&category2=39&idx=5954','_blank')">셀프 가이드: 통신판매업 신고법 →</button></div></div>
+</div>
+
+<!-- 액션 플랜 -->
+<div class="sec">
+  <div class="ap">
+    <div style="font-size:12px;font-weight:700;color:#fff;margin-bottom:8px">종합 액션 플랜</div>
+    <div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:7px"><span style="background:#DC2626;color:#fff;font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:20px;flex-shrink:0;margin-top:1px">1순위</span><span style="font-size:11.5px;color:#E2E8F0;line-height:1.5">상표 변리사 상담 즉시 진행 — 유사 상표 3건, 출원 전 전략 수립 필수</span></div>
+    <div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:7px"><span style="background:#D97706;color:#fff;font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:20px;flex-shrink:0;margin-top:1px">2순위</span><span style="font-size:11.5px;color:#E2E8F0;line-height:1.5">mybrew.com · mybrew.co.kr 즉시 선점 · SNS 대체 아이디(@mybrew_kr) 확보</span></div>
+    <div style="display:flex;gap:8px;align-items:flex-start"><span style="background:#059669;color:#fff;font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:20px;flex-shrink:0;margin-top:1px">3순위</span><span style="font-size:11.5px;color:#E2E8F0;line-height:1.5">유튜브·틱톡 채널 선점 · 홈페이지 제작 · 통신판매업 신고</span></div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="sec">
+  <div class="bridge"><div style="font-size:14.5px;font-weight:700;color:#1B2C5E;margin-bottom:4px">상표 리스크가 발견됐어요. 지금 바로 해결할 수 있어요.</div><div style="font-size:12.5px;color:#64748B;line-height:1.6">브랜드명을 바꾸거나, 변리사와 상담해서 출원 전략을 세워보세요.</div></div>
+  <div class="cta-stack">
+    <button class="cta-btn cta-a" onclick="window.open('https://forms.gle/rhtbqheKj29LgEPS8','_blank')">
+      <div style="flex:1;text-align:left"><div style="font-size:13.5px;font-weight:700;color:#fff">브랜드 세팅 리포트 다시 받기</div><div style="font-size:11px;color:#93C5FD;margin-top:2px">브랜드명 변경 후 · 8개 항목 전체 재조사</div></div>
+      <span style="background:rgba(255,255,255,.2);color:#fff;font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.3);white-space:nowrap">9,900원</span>
+    </button>
+    <button class="cta-btn cta-b" onclick="window.open('https://forms.gle/rhtbqheKj29LgEPS8','_blank')">
+      <div style="flex:1;text-align:left"><div style="font-size:13.5px;font-weight:700;color:#1B2C5E">브랜드명 확정 패키지</div><div style="font-size:11px;color:#64748B;margin-top:2px">후보 검사 · 통과할 때까지 제한 없음</div></div>
+      <span style="background:#1B2C5E;color:#fff;font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;white-space:nowrap">49,900원</span>
+    </button>
+    <button class="cta-btn cta-c" onclick="window.open('https://forms.gle/d67P9JXPVEL4mH5C6','_blank')">
+      <div style="flex:1;text-align:left"><div style="font-size:13.5px;font-weight:700;color:#991B1B">상표 변리사 연계 출원의뢰</div><div style="font-size:11px;color:#7F1D1D;margin-top:2px">할인 연계 · 직접 상담 후 출원 진행</div></div>
+      <span style="background:#991B1B;color:#fff;font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;white-space:nowrap">상담 →</span>
+    </button>
+  </div>
+  <div class="disc">본 리포트는 지식재산처 KIPRIS DB를 기반으로 AI가 1차 분석하고, 상표 심사 경험을 보유한 지식재산학 석·박사 팀이 2차 검토한 결과입니다. 기본적인 상표심사기준에 따른 유사 여부 참고 자료이며, 법적 효력이 있는 전문가 의견서가 아닙니다. 최종 출원 여부는 변리사와 상담하시기 바랍니다.</div>
+</div>
+
+</div>
+<p style="text-align:center;font-size:11px;color:#94A3B8;margin-top:1rem">© 브랜드랩 · 지식재산학 석·박사 팀 운영</p>
+</div>
+
+<script>
+function tog(btn){
+  const l=btn.nextElementSibling;
+  l.classList.toggle('open');
+  if(!btn.dataset.o)btn.dataset.o=btn.textContent.replace('▼ ','');
+  btn.textContent=l.classList.contains('open')?'▲ '+btn.dataset.o.replace('보기','접기').replace('보기','접기'):'▼ '+btn.dataset.o;
+}
+</script>
+</body>
+</html>
