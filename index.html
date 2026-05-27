@@ -202,7 +202,10 @@ textarea{resize:vertical;min-height:64px;line-height:1.5;font-family:inherit}
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="m9 12 2 2 4-4"/></svg>
       BRAND LAB
     </div>
+    <div style="display:flex;align-items:center;gap:10px">
     <div class="app-header-right" id="headerRight">창업 브랜드 세팅 진단</div>
+    <button onclick="resetKey()" style="background:rgba(255,255,255,.15);border:none;color:#93C5FD;font-size:10px;padding:3px 8px;border-radius:5px;cursor:pointer">API키 변경</button>
+  </div>
   </div>
   <div class="card">
 
@@ -479,6 +482,27 @@ textarea{resize:vertical;min-height:64px;line-height:1.5;font-family:inherit}
 </div>
 
 <script>
+// ══════════════════════════════════════
+// API 키 설정 — console.anthropic.com에서 발급 후 아래에 붙여넣기
+// ══════════════════════════════════════
+let API_KEY = localStorage.getItem('bl_apikey') || '';
+
+function checkApiKey(){
+  if(!API_KEY){
+    const k=prompt('Anthropic API 키를 입력해주세요.\nconsole.anthropic.com에서 발급 가능합니다.');
+    if(k&&k.trim().startsWith('sk-')){
+      API_KEY=k.trim();
+      localStorage.setItem('bl_apikey',API_KEY);
+    } else if(k){
+      alert('올바른 API 키 형식이 아닙니다. sk- 로 시작해야 합니다.');
+      return false;
+    } else {
+      return false;
+    }
+  }
+  return true;
+}
+
 const FIELDS=["idea_1","market_2","market_3","market_4","market_6","brand_1","brand_2","online_1","online_2","online_3","online_4","launch_1","launch_2"];
 const LABELS={idea_1:"브랜드 이름 및 로고 후보 선정",market_2:"동일·유사 상표 검토",market_3:"도메인 확보",market_4:"SNS 아이디 확보",market_6:"국내외 포털 유사 상품명 실태 조사",brand_1:"브랜드 네임·디자인 확정",brand_2:"브랜드 가이드북 제작",online_1:"홈페이지 제작",online_2:"SNS 채널 개설 및 세팅",online_3:"네이버 플레이스 등록",online_4:"SEO 키워드 세팅",launch_1:"사업자등록",launch_2:"통신판매업 신고"};
 const SECTIONS=[{label:"① 아이디어 구상",ids:["idea_1"]},{label:"② 시장 조사",ids:["market_2","market_3","market_4","market_6"]},{label:"③ 브랜드 네임·디자인 확정",ids:["brand_1","brand_2"]},{label:"④ 온라인 채널 세팅",ids:["online_1","online_2","online_3","online_4"]},{label:"⑤ 런칭",ids:["launch_1","launch_2"]}];
@@ -551,7 +575,8 @@ JSON만 응답(마크다운 없이):
 {"summary":"2문장 요약","urgentCount":숫자,"urgentItems":["항목명"],"cautionItems":["항목명"],"safeItems":["항목명"],"items":[{"id":"필드명","risk":"높음|중간|낮음|—","actionMain":"구체적 행동","actionSub":"이유","deadline":"즉시|1주 이내|런칭 전|오픈 시|홈페이지 전|온라인 판매 전|매출 전|완료","urgent":true|false}]}
 완료=risk:"—",deadline:"완료". ${FIELDS.length}개 모두 포함.`;
   try{
-    const res=await fetch("/api/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:2000,messages:[{role:"user",content:prompt}]})});
+    if(!checkApiKey())return;
+  const res=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json","x-api-key":API_KEY,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:2000,messages:[{role:"user",content:prompt}]})});
     const data=await res.json();
     const raw=(data.content?.[0]?.text||'').replace(/```json|```/g,'').trim();
     let parsed=null;
@@ -593,10 +618,21 @@ function renderResult(d,name,biz,mode,checks,done,todo,curStage,bizStage){
       const dl=isDone?'완료':getDeadline(id,risk,baseDeadline,isRunning);
       const rClass=risk==='높음'?'rhigh':risk==='중간'?'rmid':risk==='낮음'?'rlow':'rdash';
       const dlClass=dl==='긴급'?'dl-critical':dl==='즉시'?'dl-urgent':'dl-normal';
+      const GUIDE_MAP = {
+        'market_2': '<div style="margin-top:5px;display:flex;flex-wrap:wrap;gap:4px"><a href="https://www.youtube.com/watch?v=tCL5ChbGrOw" target="_blank" style="background:#EEF2FF;color:#1B2C5E;font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;text-decoration:none;white-space:nowrap">셀프 가이드: 상표 출원하는 법 →</a> <a href="https://litt.ly/markat" target="_blank" style="background:#1B2C5E;color:#fff;font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;text-decoration:none;white-space:nowrap">변리사 상담 연계 →</a></div>',
+        'market_3': '<div style="margin-top:5px"><a href="https://domain.whois.co.kr/" target="_blank" style="background:#EEF2FF;color:#1B2C5E;font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;text-decoration:none">셀프 가이드: 도메인 등록하러 가기 →</a></div>',
+        'market_4': '<div style="margin-top:5px"><a href="https://namechk.com/" target="_blank" style="background:#EEF2FF;color:#1B2C5E;font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;text-decoration:none">셀프 가이드: SNS 아이디 선점 확인 →</a></div>',
+        'online_1': '<div style="margin-top:5px"><a href="https://imweb.me/" target="_blank" style="background:#EEF2FF;color:#1B2C5E;font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;text-decoration:none">무료 제작 도구 →</a></div>',
+        'online_3': '<div style="margin-top:5px"><a href="https://m.blog.naver.com/victoryace89/224241912375" target="_blank" style="background:#EEF2FF;color:#1B2C5E;font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;text-decoration:none">셀프 가이드: 플레이스 등록법 →</a></div>',
+        'launch_1': '<div style="margin-top:5px"><a href="https://lumpenman.tistory.com/3" target="_blank" style="background:#EEF2FF;color:#1B2C5E;font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;text-decoration:none">셀프 가이드: 인터넷등기소 상호 확인하는 법 →</a></div>',
+        'launch_2': '<div style="margin-top:5px"><a href="https://imweb.me/faq?mode=view&amp;category=29&amp;category2=39&amp;idx=5954" target="_blank" style="background:#EEF2FF;color:#1B2C5E;font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;text-decoration:none">셀프 가이드: 통신판매업 신고법 →</a></div>',
+        'online_4': '<div style="margin-top:5px"><a href="https://marketingupside.com/blog/seo-%EC%B4%88%EB%B3%B4%EC%9E%90%EB%A5%BC-%EC%9C%84%ED%95%9C-%ED%82%A4%EC%9B%8C%EB%93%9C-%EC%B0%BE%EA%B8%B0-%EC%99%84%EB%B2%BD-%EA%B0%80%EC%9D%B4%EB%93%9C" target="_blank" style="background:#EEF2FF;color:#1B2C5E;font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;text-decoration:none">셀프 가이드: SEO 키워드 찾기 가이드 →</a></div>',
+      };
+      const guideHtml = GUIDE_MAP[id]||'';
       rows+=`<tr class="${urgent?'urgent-row':''} ${id==='market_2'&&!isDone?'trademark-row':''}">
         <td><span class="${isDone?'bdone':'btodo'}">${isDone?'완료':'미완'}</span><br><span style="font-size:11.5px;font-weight:600;color:#1E293B;margin-top:3px;display:block;line-height:1.4">${LABELS[id]}</span></td>
         <td><span class="${rClass}">${risk}</span></td>
-        <td><div class="act-main">${aMain}</div>${aSub?`<div class="act-sub">${aSub}</div>`:''}</td>
+        <td><div class="act-main">${aMain}</div>${aSub?`<div class="act-sub">${aSub}</div>`:''}${guideHtml}</td>
         <td><span class="${dlClass}">${dl}</span></td>
       </tr>`;
     });
@@ -653,17 +689,17 @@ function renderResult(d,name,biz,mode,checks,done,todo,curStage,bizStage){
     </div>
     <div class="bridge"><div class="bridge-main">${bridgeMain}</div><div class="bridge-sub">상표 조사부터 브랜드 세팅까지, 브랜드 세팅 리포트 하나로 해결됩니다.</div></div>
     <div class="cta-row">
-      <button class="cta-btn cta-free" onclick="showPage('p4')">
+      <button class="cta-btn cta-free" onclick="window.open('https://litt.ly/markat/sale/NfRmWn7','_blank')">
         <span class="cta-tag tag-free">무료</span>
         <span class="cta-btn-name">상표 조사결과 무료로 받기</span>
         <span class="cta-btn-desc">회원가입 시 첫 1회 무료</span>
       </button>
-      <button class="cta-btn cta-paid" onclick="showPage('p5')">
+      <button class="cta-btn cta-paid" onclick="window.open('https://litt.ly/markat/sale/6AObvvE','_blank')">
         <span class="cta-tag tag-paid">9,900원</span>
         <span class="cta-btn-name">브랜드 세팅 리포트 받기</span>
         <span class="cta-btn-desc">상표조사 포함 · 혼자서도 해결할 수 있도록 항목별 가이드 제공</span>
       </button>
-      <button class="cta-btn cta-premium" onclick="showPage('p6')">
+      <button class="cta-btn cta-premium" onclick="window.open('https://litt.ly/markat/sale/t75gWR1','_blank')">
         <span class="cta-tag tag-premium">49,900원</span>
         <span class="cta-btn-name">브랜드명 확정 패키지</span>
         <span class="cta-btn-desc">통과할 때까지 끝까지 검사해드립니다</span>
@@ -693,6 +729,14 @@ function submitForm(completePage, fromPage){
   showPage(completePage);
 }
 
+function resetKey(){
+  const k=prompt('새 API 키를 입력해주세요.');
+  if(k&&k.trim().startsWith('sk-')){
+    API_KEY=k.trim();
+    localStorage.setItem('bl_apikey',API_KEY);
+    alert('API 키가 변경됐습니다.');
+  }
+}
 function resetForm(){
   document.getElementById('brandName').value='';
   document.getElementById('bizType').value='';
