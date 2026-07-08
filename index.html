@@ -687,24 +687,20 @@ function renderResult(d,name,biz,mode,checks,done,todo,curStage,bizStage){
     <button class="cta-restart" onclick="showPage('p1');resetForm()">← 처음부터 다시</button>`;
 }
 
-// ── 구글폼 연동 (신청 이력 자동 저장) ──
-const GFORM_ACTION = 'https://docs.google.com/forms/d/e/1FAIpQLSfOrkqRbzz33cnvmP2_-LR9hl_doeI8zMCNa7NMTcXMeCgzXQ/formResponse';
-const GFORM_ENTRY = {
-  brand:  'entry.2023886059', // 브랜드명
-  biz:    'entry.1916394379', // 업종
-  phone:  'entry.1409150400', // 전화번호
-  email:  'entry.1286638082', // 이메일
-  product:'entry.722465427',  // 신청상품
-};
-function saveToGoogleForm(data){
-  const fd = new FormData();
-  fd.append(GFORM_ENTRY.brand,   data.brand   || '');
-  fd.append(GFORM_ENTRY.biz,     data.biz     || '');
-  fd.append(GFORM_ENTRY.phone,   data.phone   || '');
-  fd.append(GFORM_ENTRY.email,   data.email   || '');
-  fd.append(GFORM_ENTRY.product, data.product || '');
-  return fetch(GFORM_ACTION, {method:'POST', mode:'no-cors', body:fd})
-    .catch(err => console.error('구글폼 저장 오류:', err));
+// ── 구글시트 연동 (진단·신청 전체 기록 자동 저장) ──
+const SHEET_ENDPOINT = 'https://script.google.com/macros/s/AKfycbzi_UUxS9hUk0WqE0tMKZZbCx0HwA10Xm3oGQ6g-Gz3jPPLhMmqARWddxRKHJzMPWncfw/exec';
+function saveToSheet(data){
+  try{
+    // text/plain 으로 보내 프리플라이트 없이 Apps Script가 받도록 함
+    fetch(SHEET_ENDPOINT, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(data)
+    }).catch(err => console.error('시트 저장 오류:', err));
+  }catch(err){
+    console.error('시트 저장 오류:', err);
+  }
 }
 
 function submitForm(completePage, fromPage){
@@ -725,7 +721,20 @@ function submitForm(completePage, fromPage){
     <div class="complete-row"><span class="complete-key">전화번호</span><span class="complete-val">${phone}</span></div>
     ${email?`<div class="complete-row"><span class="complete-key">이메일</span><span class="complete-val">${email}</span></div>`:''}
     <div class="complete-row"><span class="complete-key">결제</span><span class="complete-val" style="color:#1B2C5E;font-weight:700">${price}</span></div>`;
-  saveToGoogleForm({brand:brand, biz:biz, phone:phone, email:email, product:price});
+  // 첫 화면 입력값 + 항목별 체크 결과 + 신청 정보 전부 수집해서 시트로 전송
+  const firstBrand = document.getElementById('brandName')?.value.trim() || brand;
+  const firstBiz   = document.getElementById('bizType')?.value.trim() || biz;
+  const bizMode    = document.getElementById('bizMode')?.value || '';
+  saveToSheet({
+    product: price,
+    brand:   firstBrand,
+    biz:     firstBiz,
+    bizMode: bizMode,
+    bizStage:getBizStage(),
+    checks:  getChecks(),
+    phone:   phone,
+    email:   email
+  });
   showPage(completePage);
 }
 function resetForm(){
