@@ -687,6 +687,26 @@ function renderResult(d,name,biz,mode,checks,done,todo,curStage,bizStage){
     <button class="cta-restart" onclick="showPage('p1');resetForm()">← 처음부터 다시</button>`;
 }
 
+// ── 구글폼 연동 (신청 이력 자동 저장) ──
+const GFORM_ACTION = 'https://docs.google.com/forms/d/e/1FAIpQLSfOrkqRbzz33cnvmP2_-LR9hl_doeI8zMCNa7NMTcXMeCgzXQ/formResponse';
+const GFORM_ENTRY = {
+  brand:  'entry.2023886059', // 브랜드명
+  biz:    'entry.1916394379', // 업종
+  phone:  'entry.1409150400', // 전화번호
+  email:  'entry.1286638082', // 이메일
+  product:'entry.722465427',  // 신청상품
+};
+function saveToGoogleForm(data){
+  const fd = new FormData();
+  fd.append(GFORM_ENTRY.brand,   data.brand   || '');
+  fd.append(GFORM_ENTRY.biz,     data.biz     || '');
+  fd.append(GFORM_ENTRY.phone,   data.phone   || '');
+  fd.append(GFORM_ENTRY.email,   data.email   || '');
+  fd.append(GFORM_ENTRY.product, data.product || '');
+  return fetch(GFORM_ACTION, {method:'POST', mode:'no-cors', body:fd})
+    .catch(err => console.error('구글폼 저장 오류:', err));
+}
+
 function submitForm(completePage, fromPage){
   const phoneId = fromPage==='p4'?'f4_phone':fromPage==='p5'?'f5_phone':'f6_phone';
   const phone = document.getElementById(phoneId)?.value.trim();
@@ -705,6 +725,7 @@ function submitForm(completePage, fromPage){
     <div class="complete-row"><span class="complete-key">전화번호</span><span class="complete-val">${phone}</span></div>
     ${email?`<div class="complete-row"><span class="complete-key">이메일</span><span class="complete-val">${email}</span></div>`:''}
     <div class="complete-row"><span class="complete-key">결제</span><span class="complete-val" style="color:#1B2C5E;font-weight:700">${price}</span></div>`;
+  saveToGoogleForm({brand:brand, biz:biz, phone:phone, email:email, product:price});
   showPage(completePage);
 }
 function resetForm(){
